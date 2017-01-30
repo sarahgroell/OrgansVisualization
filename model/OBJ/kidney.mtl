@@ -1,0 +1,44 @@
+# Blender MTL File: 'None'
+# Material Count: 4
+
+newmtl Ureter
+Ns 254.901961
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.673685 0.516015
+Ks 0.800000 0.673685 0.516015
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl blue
+Ns 254.901961
+Ka 0.000000 0.000000 0.000000
+Kd 0.115317 0.411566 0.800000
+Ks 0.028829 0.102891 0.200000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl kidney_C
+Ns 254.901961
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.800000 0.800000 0.800000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\sarah.groell\Documents\3HEARC\infographie\Projet\TestCoeur\DL3D_TorsoComplete_OBJ\KidneyC.jpg
+map_Bump C:\\Users\\sarah.groell\\Documents\\3HEARC\\infographie\\Projet\\TestCoeur\\DL3D_TorsoComplete_OBJ\\KidneyB.jpg
+
+newmtl red
+Ns 254.901961
+Ka 0.000000 0.000000 0.000000
+Kd 0.576102 0.000000 0.000473
+Ks 0.576102 0.000000 0.000473
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2

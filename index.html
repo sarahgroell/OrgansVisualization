@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+      <meta charset="utf-8"/>
+      <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+      <!-- import of webgl utilities -->
+      <script src="js/commonFunctions.js"></script>
+      <script src="js/gl-matrix.js"></script>
+      <script src="js/webglTools.js"></script>
+      <script src="debug/webgl-debug.js"></script>
+
+      <!-- Application scripts -->
+      <script src="js/scene.js"></script>
+      <script src="js/organ.js"></script>
+		  <script src="js/OBJ_loader.js"></script>
+
+      <!-- vertex shader -->
+      <script id="shader-vs" type="x-shader/x-vertex">
+      const float PI = 3.14159;
+
+      attribute vec3 aVertexPosition;
+			attribute vec3 aVertexNormal;
+			attribute vec2 aTextureCoord;
+
+			uniform mat4 uMVMatrix;
+			uniform mat4 uPMatrix;
+			uniform mat4 uNMatrix;
+
+			uniform vec3 uLightPosition;
+
+			varying vec3 vNormal;
+			varying vec2 vTextureCoord;
+			varying vec3 vLightRay;
+
+			void main(void) {
+        vec4 vertex = uMVMatrix * vec4(aVertexPosition, 1.0);
+        vec4 light = vec4(uLightPosition,1.0);
+        vLightRay = vertex.xyz - light.xyz;
+    		vTextureCoord = aTextureCoord;
+				vNormal = vec3(uNMatrix * vec4(aVertexNormal, 1.0));
+        gl_Position = uPMatrix * vertex;
+			}
+		</script>
+
+		<script id="shader-fs" type="x-shader/x-fragment">
+			#ifdef GL_ES
+			precision highp float;
+			#endif
+
+      uniform float uAlpha;
+
+			uniform sampler2D uColorTexture;
+			varying vec2 vTextureCoord;
+
+			varying vec3 vNormal;
+			varying vec3 vLightRay;
+			void main(void){
+				vec3 finalColor;
+				vec2 mapCoord = vec2(vTextureCoord.s, vTextureCoord.t);
+				vec4 texelColor = texture2D(uColorTexture, mapCoord);
+        //Astuce
+        //if (texelColor.x==255.0/255.0 && texelColor.y==255.0/255.0 && texelColor.z==255.0/255.0){discard;}
+        if (texelColor.a < 1.0){discard;}
+
+
+				vec3 L = normalize(vLightRay);
+				vec3 N = normalize(vNormal);
+				float lambertTerm = dot(N,-L);
+				finalColor = texelColor.rgb;
+				if( lambertTerm>0.0 )
+				finalColor *= lambertTerm;
+				gl_FragColor = vec4(finalColor, texelColor.a);
+			}
+		</script>
+
+
+  </head>
+  <body onload="initWebGL()">
+    <script>
+      displayTitle("Visualisation d'organes", 1,1,1,1,1,1,1);
+    </script>
+    <div id="controls" style="float:right;width: 48%;">
+      <div>
+        <span>Isoler: </span><select id="selectOrgan">
+        <option value="0">Sélectionner un organe à isoler</option></select>
+        <button type="button" id="isolate">Isoler</button>
+        <button type="button" id="reload">Reload</button>
+        <button type="button" id="infos">Informations</button>
+        <button type="button" id="turnLeft">Turn left</button>
+      	<button type="button" id="turnRight"> Turn right </button>
+      </div>
+      <div>
+        <span id="informations"></span>
+      </div>
+    </div>
+    <canvas id="webgl-canvas" width="800" height="680" style="float:left;">
+      HTML5 is not supported
+    </canvas>
+
+  </body>
+  <script src="js/mouseMotionHandling.js"></script>
+</html>

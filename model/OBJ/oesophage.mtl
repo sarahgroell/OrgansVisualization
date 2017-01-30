@@ -1,0 +1,14 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl Esophagus
+Ns 127.450980
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.533691 0.202350 0.122696
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\sarah.groell\Documents\3HEARC\infographie\Projet\TestCoeur\DL3D_TorsoComplete_OBJ\EsophagusC.jpg
+map_Bump C:\\Users\\sarah.groell\\Documents\\3HEARC\\infographie\\Projet\\TestCoeur\\DL3D_TorsoComplete_OBJ\\EsophagusC.jpg
