@@ -41,7 +41,7 @@
         gl_Position = uPMatrix * vertex;
 			}
 		</script>
-
+    <!-- fragment shader -->
 		<script id="shader-fs" type="x-shader/x-fragment">
 			#ifdef GL_ES
 			precision highp float;
@@ -58,10 +58,7 @@
 				vec3 finalColor;
 				vec2 mapCoord = vec2(vTextureCoord.s, vTextureCoord.t);
 				vec4 texelColor = texture2D(uColorTexture, mapCoord);
-        //Astuce
-        //if (texelColor.x==255.0/255.0 && texelColor.y==255.0/255.0 && texelColor.z==255.0/255.0){discard;}
         if (texelColor.a < 1.0){discard;}
-
 
 				vec3 L = normalize(vLightRay);
 				vec3 N = normalize(vNormal);
@@ -79,15 +76,16 @@
     <script>
       displayTitle("Visualisation d'organes", 1,1,1,1,1,1,1);
     </script>
-    <div id="controls" style="float:right;width: 48%;">
+    <div id="controls" style="float:right;width: 35%;">
+      <div style="margin-bottom: 10px;">
+        <span><b>Pour contrôler la scène :</b></br> Flèches: déplacer les organes (haut/bas, gauche/droite). </br>a,d : rotation des organes. </br>w,s : zoom/dézoom </br></span>
+      </div>
       <div>
-        <span>Isoler: </span><select id="selectOrgan">
+        <span><b>Isoler: </b></span><select id="selectOrgan">
         <option value="0">Sélectionner un organe à isoler</option></select>
         <button type="button" id="isolate">Isoler</button>
         <button type="button" id="reload">Reload</button>
         <button type="button" id="infos">Informations</button>
-        <button type="button" id="turnLeft">Turn left</button>
-      	<button type="button" id="turnRight"> Turn right </button>
       </div>
       <div>
         <span id="informations"></span>

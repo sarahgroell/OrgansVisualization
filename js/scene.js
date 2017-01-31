@@ -3,6 +3,7 @@ var vertexBuffer = null;
 var indexBuffer = null;
 var colorBuffer = null;
 
+//Tableau qui contient tous les organes
 var organs = [];
 
 var selectBox = document.getElementById('selectOrgan');
@@ -25,17 +26,14 @@ var mvMatrix = mat4.create(); //ModelViewMatrix
 var pMatrix = mat4.create(); //Projection Matrix
 var nMatrix = mat4.create(); //Normals Matrix
 
-
+//Déplacemeent original de la caméra --> permettre une Visualisation compélète des organes
 var tx = 0.0;
 var ty = -14.0;
 var tz = -32.0;
-
+//Rotation initiale
 var rx = 2;
 
-
-
 window.onkeydown = checkKey;
-//window.onkeyup = checkKeyUp;
 
 var movingStep = 1.0;
 
@@ -77,26 +75,27 @@ function initShaderParameters(prg){
 			prg.lightPositionUniform       	= glContext.getUniformLocation(prg, 'uLightPosition');
 }
 
-//code pour créer la géométrie
 function initBuffers(){
 	vertexBuffer = getVertexBufferWithVertices(vertices);
 	colorBuffer  = getVertexBufferWithVertices(colors);
 	indexBuffer  = getIndexBufferWithIndices(indices);
 }
 
-
+//Rotation sur la gauche
 function turnL(){
 for (var i = 0; i < organs.length; i++) {
 		organs[i].rotateObjOnYAxis(-10);
 	}
 }
 
-
+//Rotation sur la droite
 function turnR(){
 	for (var i = 0; i < organs.length; i++) {
 			organs[i].rotateObjOnYAxis(10);
 		}
 }
+
+//Obtenir les informations de l'organe sélectionné
 function getInformations(){
 	var strOrgane = selectOrgan.options[selectOrgan.selectedIndex].value;
 	if(strOrgane != 0){
@@ -108,6 +107,8 @@ function getInformations(){
 		}
 	}
 }
+
+//Isole un organe
 function isolate(){
 	var strOrgane = selectOrgan.options[selectOrgan.selectedIndex].value;
 	if(strOrgane != 0){
@@ -121,6 +122,7 @@ function isolate(){
 	}
 }
 
+//Recharge tous les organes
 function reload(){
 	selectOrgan.disabled = false;
 	for (var i = 0; i < organs.length; i++) {
@@ -135,6 +137,7 @@ function reload(){
 	rotY = 0;
 }
 
+//Chargement de tous les organes
 function allOrgans(x,y,z){
 	organs.push(new Organ(vec3.fromValues(x,y,z), "../model/OBJ/oesophage.obj", "model/OBJ/EsophagusC.JPG", "Esophagus"));
 	organs.push(new Organ(vec3.fromValues(x,y,z), "../model/OBJ/gallBlader.obj", "model/OBJ/GallBladderC.JPG","Gall Bladder"));
@@ -151,6 +154,7 @@ function allOrgans(x,y,z){
 	this.setInfos();
 }
 
+//Set des informations concernant les organes
 function setInfos(){
 	organs[0].setInformations("The esophagus commonly known as the food pipe or gullet, is an organ in vertebrates through which food passes, aided by peristaltic contractions, from the pharynx to the stomach.");
 	organs[1].setInformations("In vertebrates the gallbladder (also gall bladder, biliary vesicle or cholecyst) is a small organ where bile (a fluid produced by the liver) is stored and concentrated before it is released into the small intestine.</br> Humans can live without a gallbladder.");
@@ -165,10 +169,8 @@ function setInfos(){
 	organs[10].setInformations("The spleen is an organ found in virtually all vertebrates. Similar in structure to a large lymph node, it acts primarily as a blood filter.</br>The spleen plays important roles in regard to red blood cells (also referred to as erythrocytes) and the immune system. It removes old red blood cells and holds a reserve of blood, which can be valuable in case of hemorrhagic shock, and also recycles iron. As a part of the mononuclear phagocyte system, it metabolizes hemoglobin removed from senescent red blood cells (erythrocytes). The globin portion of hemoglobin is degraded to its constitutive amino acids, and the heme portion is metabolized to bilirubin, which is removed in the liver.")
 }
 
-function initScene(){
 
-	document.getElementById("turnLeft").addEventListener("click", turnL);
-	document.getElementById("turnRight").addEventListener("click", turnR);
+function initScene(){
 	document.getElementById("isolate").addEventListener("click",isolate);
 	document.getElementById("reload").addEventListener("click",reload);
 	document.getElementById("infos").addEventListener("click",getInformations);
@@ -177,11 +179,10 @@ function initScene(){
 	var y = 0;
 	var z = 0;
 	allOrgans(x,y,z);
-
+	//Remplissage de la liste déroulante avec tous les noms des organes
 	organs.forEach(function(element, index){
 		selectOrgan.innerHTML += "<option value='" + element.name + "'>"+element.name+"</option>";
 	});
-
 
 
 	//Enabling the depth test
@@ -194,6 +195,7 @@ function initScene(){
 	//Defining the viewport as the size of the canvas
 	glContext.viewport(0.0, 0.0, c_width, c_height);
 
+	//Définit la perspective
 	mat4.perspective(pMatrix, degToRad(45), c_width / c_height, 0.1, 1000.0);
 
 	//Appel à la fonction rendu de la scène
@@ -215,6 +217,7 @@ function drawScene(){
 		mat4.translate(translationMat, translationMat,[tx, ty, tz]);
 		mvMatrix = mat4.multiply(mat4.create(), translationMat, mvMatrix);
 
+		//Dessine les organes
 		organs.forEach(function(element, index){
 				element.drawObject(mat4.create(),mvMatrix);
 		});

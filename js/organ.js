@@ -82,9 +82,6 @@ class Organ{
     this.indexBuffer  = getIndexBufferWithIndices(this.indices);
     //Affiche l'objet dans le bon sens au départ (coeur face à nous)
     this.rotateObjOnXAxis(-90);
-
-
-
   }
 
   //This method clears the buffer
@@ -101,6 +98,7 @@ class Organ{
     }
   }
 
+  //Fonctions de rotation
   rotateObjOnXAxis(degre){
      var rotXQuat = quat.create();
      quat.setAxisAngle(rotXQuat, [1, 0, 0], degToRad(degre));
@@ -109,7 +107,6 @@ class Organ{
      mat4.fromQuat(rotationMatrix, rotXQuat);
      mat4.multiply(this.mvMatrix, rotationMatrix, this.mvMatrix);
    }
-
  rotateObjOnYAxis(degre){
     var rotYQuat = quat.create();
     quat.setAxisAngle(rotYQuat, [0, 1, 0], degToRad(degre));
@@ -151,7 +148,5 @@ class Organ{
         glContext.drawElements(glContext.TRIANGLES, this.indicesArray[0].length, glContext.UNSIGNED_SHORT,0);
       }
     }
-
   }
-
 }
